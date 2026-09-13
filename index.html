@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dive Oxygen Toxicity Explorer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Dive Oxygen Toxicity Explorer</h1>
+    <p class="subtitle">See how CNS and pulmonary oxygen toxicity build up during a dive and recover afterward.</p>
+  </header>
+
+  <div class="disclaimer">
+    <strong>Educational tool only — not for real dive planning.</strong>
+    Assumes a square dive profile (instant descent/ascent, constant depth) and simplified
+    recovery models. Always use certified dive planning software, tables, and training for
+    actual dives.
+  </div>
+
+  <main>
+    <section class="panel">
+      <form id="dive-form">
+        <div class="field">
+          <label for="duration">Dive duration (minutes)</label>
+          <input type="number" id="duration" name="duration" min="1" step="1" value="30" required />
+        </div>
+
+        <div class="field">
+          <label for="depth">Depth (meters)</label>
+          <input type="number" id="depth" name="depth" min="1" max="100" step="1" value="20" required />
+        </div>
+
+        <div class="field">
+          <label for="o2percent">O2 breathed (%)</label>
+          <input type="number" id="o2percent" name="o2percent" min="21" max="100" step="1" value="32" required />
+        </div>
+
+        <fieldset class="field checkboxes">
+          <legend>Indexes to show</legend>
+          <label><input type="checkbox" name="showCns" checked /> CNS oxygen toxicity (%)</label>
+          <label><input type="checkbox" name="showOtu" checked /> Pulmonary toxicity (OTU)</label>
+        </fieldset>
+
+        <button type="submit">Calculate</button>
+        <p id="form-error" class="error"></p>
+      </form>
+
+      <div id="summary" class="summary"></div>
+    </section>
+
+    <section class="panel chart-panel">
+      <canvas id="toxicity-chart" height="400"></canvas>
+      <p class="note">
+        Both indexes are shown as a % of a recommended limit so they can be compared on one
+        scale: CNS% is already a % of the NOAA single-exposure limit; OTU is shown as a % of a
+        commonly-cited 300 OTU/day reference (illustrative, not an official single-dive cutoff).
+        The vertical dashed line marks surfacing. CNS% decays after surfacing (~90 min
+        half-time); OTU is shown flat since pulmonary recovery takes on the order of days.
+      </p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
