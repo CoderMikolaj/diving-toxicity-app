@@ -8,8 +8,8 @@ const canvas = document.getElementById('toxicity-chart');
 
 function validateInputs({ durationMin, depthM, o2Percent }) {
   if (!(durationMin > 0)) return 'Dive duration must be greater than 0 minutes.';
-  if (!(depthM > 0) || depthM > 100) return 'Depth must be between 0 and 100 meters.';
-  if (!(o2Percent >= 21) || o2Percent > 100) return 'O2 percentage must be between 21 and 100.';
+  if (!(depthM > 0) || depthM > 1000) return 'Depth must be between 0 and 1000 meters.';
+  if (!(o2Percent >= 0) || o2Percent > 100) return 'O2 percentage must be between 0 and 100.';
   return null;
 }
 
