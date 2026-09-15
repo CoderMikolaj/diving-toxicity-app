@@ -6,9 +6,10 @@ const errorBox = document.getElementById('form-error');
 const summaryBox = document.getElementById('summary');
 const canvas = document.getElementById('toxicity-chart');
 
+// TODO: The inputs are validated in the HTML, so this function is not very useful right now.
 function validateInputs({ durationMin, depthM, o2Percent }) {
   if (!(durationMin > 0)) return 'Dive duration must be greater than 0 minutes.';
-  if (!(depthM > 0) || depthM > 1000) return 'Depth must be between 0 and 1000 meters.';
+  if (!(depthM >= 0) || depthM > 100) return 'Depth must be between 0 and 100 meters.';
   if (!(o2Percent >= 0) || o2Percent > 100) return 'O2 percentage must be between 0 and 100.';
   return null;
 }

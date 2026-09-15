@@ -22,17 +22,17 @@
       <form id="dive-form">
         <div class="field">
           <label for="duration">Dive duration (minutes)</label>
-          <input type="number" id="duration" name="duration" min="1" step="1" value="30" required />
+          <input type="number" id="duration" name="duration" min="1" step="1" value="60" required />
         </div>
 
         <div class="field">
           <label for="depth">Depth (meters)</label>
-          <input type="number" id="depth" name="depth" min="1" max="100" step="1" value="20" required />
+          <input type="number" id="depth" name="depth" min="0" max="100" step="1" value="20" required />
         </div>
 
         <div class="field">
           <label for="o2percent">O2 breathed (%)</label>
-          <input type="number" id="o2percent" name="o2percent" min="21" max="100" step="1" value="32" required />
+          <input type="number" id="o2percent" name="o2percent" min="0" max="100" step="1" value="21" required />
         </div>
 
         <fieldset class="field checkboxes">
