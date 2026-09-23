@@ -6,7 +6,11 @@ function toPoints(times, values) {
   return times.map((t, i) => ({ x: t, y: values[i] }));
 }
 
-export function renderChart(canvas, simulation, { showCns = true, showOtu = true } = {}) {
+export function renderChart(
+  canvas,
+  simulation,
+  { showCns = true, showOtu = true, showEsot = true } = {},
+) {
   const datasets = [];
 
   if (showCns) {
@@ -27,6 +31,18 @@ export function renderChart(canvas, simulation, { showCns = true, showOtu = true
       data: toPoints(simulation.times, simulation.otuPercentOfLimit),
       borderColor: '#2e86ab',
       backgroundColor: '#2e86ab',
+      pointRadius: 0,
+      borderWidth: 2,
+      tension: 0.15,
+    });
+  }
+
+  if (showEsot) {
+    datasets.push({
+      label: 'Pulmonary O2 toxicity, ESOT (% of single-exposure limit)',
+      data: toPoints(simulation.times, simulation.esotPercentOfLimit),
+      borderColor: '#6a4c93',
+      backgroundColor: '#6a4c93',
       pointRadius: 0,
       borderWidth: 2,
       tension: 0.15,

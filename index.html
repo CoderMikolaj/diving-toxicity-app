@@ -22,7 +22,7 @@
       <form id="dive-form">
         <div class="field">
           <label for="duration">Dive duration (minutes)</label>
-          <input type="number" id="duration" name="duration" min="1" step="1" value="60" required />
+          <input type="number" id="duration" name="duration" min="1" step="1" value="120" required />
         </div>
 
         <div class="field">
@@ -39,6 +39,7 @@
           <legend>Indexes to show</legend>
           <label><input type="checkbox" name="showCns" checked /> CNS oxygen toxicity (%)</label>
           <label><input type="checkbox" name="showOtu" checked /> Pulmonary toxicity (OTU)</label>
+          <label><input type="checkbox" name="showEsot" checked /> Pulmonary toxicity (ESOT)</label>
         </fieldset>
 
         <button type="submit">Calculate</button>
@@ -51,11 +52,19 @@
     <section class="panel chart-panel">
       <canvas id="toxicity-chart" height="400"></canvas>
       <p class="note">
-        Both indexes are shown as a % of a recommended limit so they can be compared on one
+        All three indexes are shown as a % of a recommended limit so they can be compared on one
         scale: CNS% is already a % of the NOAA single-exposure limit; OTU is shown as a % of a
-        commonly-cited 300 OTU/day reference.
+        commonly-cited 300 OTU/day reference; ESOT is shown as a % of the DMAC 35 Rev 1 660
+        single-exposure limit.
         The vertical dashed line marks surfacing. CNS% decays after surfacing (~90 min
-        half-time); OTU is shown flat since it has no recovery function, only a daily limit.
+        half-time); OTU is shown flat since it has no recovery function, only a daily limit;
+        ESOT decays after surfacing using its own recovery model, which recovers more slowly
+        the longer the dive was.
+      </p>
+      <p class="note">
+        OTU and ESOT are two competing measures of pulmonary toxicity — DMAC 35
+        Rev 1 adopted ESOT in place of the older UPTD/OTU.
+        Note that DMAC does not score air-only dives at all, but here it is computed for any PO2.
       </p>
     </section>
   </main>
