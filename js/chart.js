@@ -100,13 +100,14 @@ export function renderChart(
     label: 'Surfacing',
     data: [
       { x: simulation.surfaceTime, y: 0 },
-      { x: simulation.surfaceTime, y: 120 },
+      { x: simulation.surfaceTime, y: 100 },
     ],
     borderColor: '#555555',
     borderDash: [2, 4],
     borderWidth: 1,
     pointRadius: 0,
     fill: false,
+    rotation: 90, // the legend's 'line' defaults to horizontal
   });
 
   const config = {

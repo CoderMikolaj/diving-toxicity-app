@@ -137,7 +137,7 @@ export function vcReductionFromEsot(esot) {
 
 // Runs a series of dives through accumulation and recovery, returning the
 // accumulated ESOT after each one. Each dive is
-// { surfaceIntervalHours, durationHours, po2 } — note HOURS, matching the R.
+// { surfaceIntervalHours, durationHours, po2 }.
 // A surface interval of `resetAfterHours` zeroes the ESOT clock (DMAC 35);
 // that rule belongs to the ESOT recovery model only, not to Arieli's decay.
 export function accumulateEsotOverDives(
