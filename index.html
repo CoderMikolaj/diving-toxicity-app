@@ -20,10 +20,11 @@
   <main>
     <section class="panel">
       <form id="dive-form">
-        <fieldset class="field mode-select">
-          <legend>Breathing system</legend>
-          <label><input type="radio" name="mode" value="oc" checked /> Open circuit (OC)</label>
-          <label><input type="radio" name="mode" value="ccr" /> Closed-circuit rebreather (CCR)</label>
+        <fieldset class="field mode-select" aria-label="Breathing system">
+          <div class="tabs">
+            <label><input type="radio" name="mode" value="oc" checked /> Open circuit (OC)</label>
+            <label><input type="radio" name="mode" value="ccr" /> Closed-circuit rebreather (CCR)</label>
+          </div>
         </fieldset>
 
         <div class="field">

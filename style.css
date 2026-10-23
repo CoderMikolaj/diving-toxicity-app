@@ -97,19 +97,52 @@ main {
   margin: 0 0 16px;
 }
 
-.mode-select legend {
-  font-weight: 600;
-  font-size: 0.9rem;
-  padding: 0;
-  margin-bottom: 6px;
+.mode-select .tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }
 
-.mode-select label {
+.mode-select .tabs label {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: normal;
-  margin-bottom: 4px;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mode-select .tabs label:hover {
+  color: var(--text);
+}
+
+.mode-select .tabs label:has(input:checked) {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.mode-select .tabs label:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.mode-select .tabs input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
 .checkboxes {
