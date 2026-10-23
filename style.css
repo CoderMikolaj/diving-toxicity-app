@@ -198,6 +198,23 @@ button[type="submit"]:hover {
   margin: 4px 0;
 }
 
+.chart-readout {
+  margin: 12px 0 0;
+  padding: 8px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  white-space: pre; /* preserve the readout's multi-space gaps instead of collapsing them */
+  overflow-x: auto;
+}
+
+.chart-readout.idle {
+  color: var(--muted);
+  font-style: italic;
+}
+
 .chart-panel .note {
   color: var(--muted);
   font-size: 0.85rem;

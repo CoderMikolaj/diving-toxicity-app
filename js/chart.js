@@ -6,16 +6,45 @@ function toPoints(times, values) {
   return times.map((t, i) => ({ x: t, y: values[i] }));
 }
 
+// Reference-line datasets aren't meaningful to inspect on hover, so the
+// readout (see updateReadout) skips them by label.
+const REFERENCE_LABELS = new Set(['100% limit', 'Surfacing']);
+
+const IDLE_READOUT_TEXT = 'Hover the chart to see values at a given time.';
+
+// Chart.js "external tooltip" hook: instead of the built-in floating tooltip
+// (which, with 5 datasets and long labels, grew wide enough to cover the
+// plotted lines), render a single compact line into a fixed element below
+// the chart, so it never overlaps the data.
+function updateReadout(readoutEl, context) {
+  if (!readoutEl) return;
+  const { tooltip } = context;
+  const points = (tooltip.dataPoints ?? []).filter((dp) => !REFERENCE_LABELS.has(dp.dataset.label));
+
+  if (tooltip.opacity === 0 || points.length === 0) {
+    readoutEl.textContent = IDLE_READOUT_TEXT;
+    readoutEl.classList.add('idle');
+    return;
+  }
+
+  const t = Math.round(points[0].parsed.x);
+  const parts = points.map((dp) => `${dp.dataset.shortLabel ?? dp.dataset.label} ${Math.round(dp.parsed.y)}%`);
+  readoutEl.textContent = `t = ${t} min  —  ${parts.join('   ')}`;
+  readoutEl.classList.remove('idle');
+}
+
 export function renderChart(
   canvas,
   simulation,
   { showCns = true, showOtu = true, showEsot = true } = {},
+  readoutEl = null,
 ) {
   const datasets = [];
 
   if (showCns) {
     datasets.push({
-      label: 'CNS oxygen toxicity (% of limit)',
+      label: 'CNS (% of NOAA limit)',
+      shortLabel: 'CNS',
       data: toPoints(simulation.times, simulation.cnsSeries),
       borderColor: '#e4572e',
       backgroundColor: '#e4572e',
@@ -27,7 +56,8 @@ export function renderChart(
 
   if (showOtu) {
     datasets.push({
-      label: 'Pulmonary O2 toxicity, OTU (% of reference limit)',
+      label: 'OTU (% of reference limit)',
+      shortLabel: 'OTU',
       data: toPoints(simulation.times, simulation.otuPercentOfLimit),
       borderColor: '#2e86ab',
       backgroundColor: '#2e86ab',
@@ -39,7 +69,8 @@ export function renderChart(
 
   if (showEsot) {
     datasets.push({
-      label: 'Pulmonary O2 toxicity, ESOT (% of single-exposure limit)',
+      label: 'ESOT (% of single-exposure limit)',
+      shortLabel: 'ESOT',
       data: toPoints(simulation.times, simulation.esotPercentOfLimit),
       borderColor: '#6a4c93',
       backgroundColor: '#6a4c93',
@@ -86,11 +117,13 @@ export function renderChart(
       animation: false,
       interaction: { mode: 'nearest', axis: 'x', intersect: false },
       plugins: {
-        legend: { position: 'bottom' },
+        legend: {
+          position: 'bottom',
+          labels: { usePointStyle: true, pointStyle: 'line' },
+        },
         tooltip: {
-          callbacks: {
-            title: (items) => `t = ${items[0].parsed.x} min`,
-          },
+          enabled: false,
+          external: (context) => updateReadout(readoutEl, context),
         },
       },
       scales: {
@@ -113,5 +146,12 @@ export function renderChart(
   } else {
     chartInstance = new Chart(canvas, config);
   }
+
+  // Any previous hover position is stale against the freshly rendered data.
+  if (readoutEl) {
+    readoutEl.textContent = IDLE_READOUT_TEXT;
+    readoutEl.classList.add('idle');
+  }
+
   return chartInstance;
 }

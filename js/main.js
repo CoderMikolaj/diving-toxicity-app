@@ -5,6 +5,7 @@ const form = document.getElementById('dive-form');
 const errorBox = document.getElementById('form-error');
 const summaryBox = document.getElementById('summary');
 const canvas = document.getElementById('toxicity-chart');
+const chartReadout = document.getElementById('chart-readout');
 
 // TODO: The inputs are validated in the HTML, so this function is not very useful right now.
 function validateInputs({ durationMin, depthM, mode, o2Percent, po2Set }) {
@@ -69,7 +70,7 @@ function handleSubmit(event) {
   }
 
   const simulation = simulateDive({ depthM, durationMin, mode, o2Percent, po2Set, postDiveMin: 240 });
-  renderChart(canvas, simulation, { showCns, showOtu, showEsot });
+  renderChart(canvas, simulation, { showCns, showOtu, showEsot }, chartReadout);
   renderSummary(simulation);
 }
 
