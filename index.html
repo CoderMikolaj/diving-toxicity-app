@@ -14,25 +14,36 @@
 
   <div class="disclaimer">
     <strong>Educational tool only — not for real dive planning.</strong>
-    Assumes a square dive profile (instant descent/ascent, constant depth). 
+    Assumes a square dive profile (instant descent/ascent, constant depth/PO2).
   </div>
 
   <main>
     <section class="panel">
       <form id="dive-form">
+        <fieldset class="field mode-select">
+          <legend>Breathing system</legend>
+          <label><input type="radio" name="mode" value="oc" checked /> Open circuit (OC)</label>
+          <label><input type="radio" name="mode" value="ccr" /> Closed-circuit rebreather (CCR)</label>
+        </fieldset>
+
         <div class="field">
           <label for="duration">Dive duration (minutes)</label>
           <input type="number" id="duration" name="duration" min="1" step="1" value="120" required />
         </div>
 
-        <div class="field">
+        <div class="field" id="field-depth">
           <label for="depth">Depth (meters)</label>
           <input type="number" id="depth" name="depth" min="0" max="100" step="1" value="20" required />
         </div>
 
-        <div class="field">
+        <div class="field" id="field-o2percent">
           <label for="o2percent">O2 breathed (%)</label>
           <input type="number" id="o2percent" name="o2percent" min="0" max="100" step="1" value="21" required />
+        </div>
+
+        <div class="field hidden" id="field-po2setpoint">
+          <label for="po2setpoint">PO2 setpoint (ATA)</label>
+          <input type="number" id="po2setpoint" name="po2setpoint" min="0.21" max="3" step="0.01" value="1.3" />
         </div>
 
         <fieldset class="field checkboxes">

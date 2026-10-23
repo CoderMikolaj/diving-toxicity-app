@@ -26,10 +26,12 @@ export const OTU_REFERENCE_LIMIT = 300;
 // consecutive days and 450/day over seven.
 export const ESOT_SINGLE_EXPOSURE_LIMIT = 660;
 
+// OC dives only. CCR dives set PO2 directly via simulateDive's po2Set.
 export function po2FromDepth(depthM, fo2) {
   return (depthM / 10 + 1) * fo2;
 }
 
+// CNS%/min = 100 / T_max(PO2), with T_max linearly interpolated from CNS_TABLE.
 function cnsRatePercentPerMin(po2) {
   const shallowest = CNS_TABLE[CNS_TABLE.length - 1];
   const deepest = CNS_TABLE[0];
@@ -68,9 +70,10 @@ export function cnsAfterRecovery(cnsAtSurface, elapsedMin) {
   return cnsAtSurface * Math.pow(0.5, elapsedMin / CNS_HALF_TIME_MIN);
 }
 
+// Lambertsen: OTU/min = ((PO2 - 0.5) / 0.5) ^ (1/1.2) for PO2 > 0.5, else 0.
 function otuRatePerMin(po2) {
   if (po2 <= 0.5) return 0;
-  return Math.pow((po2 - 0.5) / 0.5, 0.83);
+  return Math.pow((po2 - 0.5) / 0.5, 1 / 1.2);
 }
 
 // --- ESOT: pulmonary oxygen toxicity -----------------------------------
@@ -118,6 +121,7 @@ export function esotAfterRecoveryArieliK(esot, previousPo2, recoveryHours) {
   const minPo2 = 1.1;
 
   const po2 = Math.max(minPo2, previousPo2);
+  // ESOT' = ESOT * exp((0.21 - 0.192 * PO2) * t), t in hours
   return esot * Math.exp((intercept - slope * po2) * recoveryHours);
 }
 
@@ -181,6 +185,7 @@ export function cnsOtKStep(initialK, po2, exposureMin) {
   const recoveryPerMin = 0.079;
 
   if (po2 >= thresholdPo2) {
+    // K' = (sqrt(K) + t * PO2 ^ 3.4) ^ 2
     const growth = exposureMin * Math.pow(po2, po2Exponent / 2);
     return Math.pow(Math.sqrt(initialK) + growth, 2);
   }
@@ -199,10 +204,25 @@ export function cnsOtK(po2Series, stepsMin, initialK = 0) {
 
 // Simulates a square-profile dive (constant depth, instant descent/ascent)
 // followed by a surface interval, at 1-minute resolution.
-export function simulateDive({ depthM, durationMin, o2Percent, postDiveMin = 240 }) {
+export function simulateDive({
+  depthM,
+  durationMin,
+  o2Percent,
+  mode = 'oc',
+  po2Set,
+  postDiveMin = 240,
+}) {
   const stepMin = 1;
-  const fo2 = o2Percent / 100;
-  const divePo2 = po2FromDepth(depthM, fo2);
+  let divePo2;
+  if (mode === 'ccr') {
+    if (!Number.isFinite(po2Set)) {
+      throw new Error('simulateDive: po2Set must be a finite number when mode is "ccr".');
+    }
+    divePo2 = po2Set; // CCR holds PO2 at the setpoint, independent of depth/FO2
+  } else {
+    const fo2 = o2Percent / 100;
+    divePo2 = po2FromDepth(depthM, fo2);
+  }
   const surfacePo2 = 0.21;
 
   const cnsRate = cnsRatePercentPerMin(divePo2);
@@ -268,5 +288,6 @@ export function simulateDive({ depthM, durationMin, o2Percent, postDiveMin = 240
     otuTotal,
     esotAtSurface,
     surfaceTime,
+    mode,
   };
 }
