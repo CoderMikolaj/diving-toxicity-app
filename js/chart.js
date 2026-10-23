@@ -1,6 +1,6 @@
 // Chart.js setup/update logic, kept separate from calculation and DOM wiring.
 
-import { OTU_REFERENCE_LIMIT, ESOT_SINGLE_EXPOSURE_LIMIT } from './toxicity.js';
+import { OTU_REFERENCE_LIMIT, ESOT_REFERENCE_LIMIT } from './toxicity.js';
 
 let chartInstance = null;
 
@@ -37,7 +37,8 @@ function updateReadout(readoutEl, context) {
     if (!limit) return `${name} ${pct}%`;
     return `${name} ${Math.round((dp.parsed.y / 100) * limit)}/${limit} (${pct}%)`;
   });
-  readoutEl.textContent = `t = ${t} min  —  ${parts.join('   ')}`;
+  // Each item is its own span so a narrow screen wraps between items, not inside one.
+  readoutEl.innerHTML = [`t = ${t} min`, ...parts].map((p) => `<span>${p}</span>`).join('');
   readoutEl.classList.remove('idle');
 }
 
@@ -78,9 +79,9 @@ export function renderChart(
 
   if (showEsot) {
     datasets.push({
-      label: 'ESOT (% of single-exposure limit)',
+      label: 'ESOT (% of 7-day daily limit)',
       shortLabel: 'ESOT',
-      limit: ESOT_SINGLE_EXPOSURE_LIMIT,
+      limit: ESOT_REFERENCE_LIMIT,
       data: toPoints(simulation.times, simulation.esotPercentOfLimit),
       borderColor: '#6a4c93',
       backgroundColor: '#6a4c93',
@@ -130,7 +131,14 @@ export function renderChart(
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { usePointStyle: true, pointStyle: 'line' },
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'line',
+            // Thicker legend swatches than the plotted lines, which are too thin to tell apart.
+            generateLabels: (chart) => Chart.defaults.plugins.legend.labels
+              .generateLabels(chart)
+              .map((item) => ({ ...item, lineWidth: 4 })),
+          },
         },
         tooltip: {
           enabled: false,

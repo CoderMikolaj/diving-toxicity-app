@@ -1,4 +1,4 @@
-import { simulateDive, OTU_REFERENCE_LIMIT, ESOT_SINGLE_EXPOSURE_LIMIT } from './toxicity.js';
+import { simulateDive, OTU_REFERENCE_LIMIT, ESOT_REFERENCE_LIMIT } from './toxicity.js';
 import { renderChart } from './chart.js';
 
 const form = document.getElementById('dive-form');
@@ -37,7 +37,7 @@ function renderSummary(simulation) {
   const otuVal = simulation.otuTotal.toFixed(0);
   const otuPct = ((simulation.otuTotal / OTU_REFERENCE_LIMIT) * 100).toFixed(0);
   const esotVal = simulation.esotAtSurface.toFixed(0);
-  const esotPct = ((simulation.esotAtSurface / ESOT_SINGLE_EXPOSURE_LIMIT) * 100).toFixed(0);
+  const esotPct = ((simulation.esotAtSurface / ESOT_REFERENCE_LIMIT) * 100).toFixed(0);
   const po2 = simulation.divePo2.toFixed(2);
   const po2Label = simulation.mode === 'ccr' ? 'PO2 (setpoint)' : 'PO2 at depth';
   const rotLine = simulation.rotProbabilityAtSurface === null
@@ -47,10 +47,10 @@ function renderSummary(simulation) {
 
   summaryBox.innerHTML = `
     <p><strong>${po2Label}:</strong> ${po2} ATA</p>
-    <p><strong>Max CNS load:</strong> ${cnsPct}% of the NOAA single-exposure limit</p>
-    <p><strong>Total OTU:</strong> ${otuVal} (~${otuPct}% of a common 300 OTU/day reference)</p>
-    <p><strong>ESOT at surfacing:</strong> ${esotVal}
-      (~${esotPct}% of the DMAC 35 ${ESOT_SINGLE_EXPOSURE_LIMIT} single-exposure limit)</p>
+    <p><strong>CNS:</strong> ${cnsPct}% of the NOAA single-exposure limit</p>
+    <p><strong>OTU:</strong> ${otuVal} (~${otuPct}% of a common 300 OTU/day reference)</p>
+    <p><strong>ESOT:</strong> ${esotVal}
+      (~${esotPct}% of the DMAC 35 ${ESOT_REFERENCE_LIMIT}/day limit for 7 consecutive diving days)</p>
     <p>${rotLine}</p>
   `;
 }

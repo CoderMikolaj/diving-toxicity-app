@@ -21,10 +21,12 @@ export const CNS_TABLE = [
 // is a commonly-cited recommended daily OTU value, not an official limit.
 export const OTU_REFERENCE_LIMIT = 300;
 
-// DMAC 35 Rev 1 (Feb 2025) single-exposure ESOT limit, the counterpart to
-// OTU_REFERENCE_LIMIT above. The multi-day limits are 500/day over five
-// consecutive days and 450/day over seven.
-export const ESOT_SINGLE_EXPOSURE_LIMIT = 660;
+// DMAC 35 Rev 1 (Feb 2025) daily ESOT limit for up to seven consecutive
+// diving days, the counterpart to OTU_REFERENCE_LIMIT above. A multi-day limit
+// because pulmonary toxicity accumulates across days; CNS recovers overnight,
+// so it keeps its single-dive limit. DMAC's other limits: 660 for a single
+// day, 500/day for up to five days.
+export const ESOT_REFERENCE_LIMIT = 450;
 
 // OC dives only. CCR dives set PO2 directly via simulateDive's po2Set.
 export function po2FromDepth(depthM, fo2) {
@@ -301,7 +303,7 @@ export function simulateDive({
     otuSeries,
     otuPercentOfLimit: otuSeries.map((v) => (v / OTU_REFERENCE_LIMIT) * 100),
     esotSeries,
-    esotPercentOfLimit: esotSeries.map((v) => (v / ESOT_SINGLE_EXPOSURE_LIMIT) * 100),
+    esotPercentOfLimit: esotSeries.map((v) => (v / ESOT_REFERENCE_LIMIT) * 100),
     divePo2,
     cnsMax: Math.max(...cnsSeries),
     otuTotal,

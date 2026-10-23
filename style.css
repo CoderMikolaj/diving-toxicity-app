@@ -206,8 +206,13 @@ button[type="submit"]:hover {
   border-radius: 6px;
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
-  white-space: pre; /* preserve the readout's multi-space gaps instead of collapsing them */
-  overflow-x: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+}
+
+.chart-readout span {
+  white-space: nowrap;
 }
 
 .chart-readout.idle {
