@@ -215,6 +215,24 @@ button[type="submit"]:hover {
   font-style: italic;
 }
 
+.site-footer {
+  max-width: 900px;
+  margin: 32px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.site-footer p {
+  margin: 4px 0;
+}
+
+.site-footer a {
+  color: var(--accent);
+}
+
 .chart-panel .note {
   color: var(--muted);
   font-size: 0.85rem;

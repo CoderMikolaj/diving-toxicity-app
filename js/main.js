@@ -90,6 +90,13 @@ form.addEventListener('change', (event) => {
   handleSubmit(event);
 });
 
+// Assembled at runtime so the full address never appears in the HTML, where
+// spam scrapers look for it.
+const contactEmail = document.getElementById('contact-email');
+const emailAddress = `${contactEmail.dataset.user}@${contactEmail.dataset.domain}`;
+contactEmail.href = `mailto:${emailAddress}`;
+contactEmail.textContent = emailAddress;
+
 // Sync the field visibility to whatever mode is checked by default, in case
 // the HTML's default ever drifts from this.
 updateModeUI();
