@@ -40,6 +40,10 @@ function renderSummary(simulation) {
   const esotPct = ((simulation.esotAtSurface / ESOT_SINGLE_EXPOSURE_LIMIT) * 100).toFixed(0);
   const po2 = simulation.divePo2.toFixed(2);
   const po2Label = simulation.mode === 'ccr' ? 'PO2 (setpoint)' : 'PO2 at depth';
+  const rotLine = simulation.rotProbabilityAtSurface === null
+    ? '<strong>ROT:</strong> only valid at PO2 1.3–1.4 ATA'
+    : `<strong>ROT (Shykoff):</strong> ~${simulation.rotProbabilityAtSurface.toFixed(0)}% probability
+      of detectable pulmonary toxicity`;
 
   summaryBox.innerHTML = `
     <p><strong>${po2Label}:</strong> ${po2} ATA</p>
@@ -47,6 +51,7 @@ function renderSummary(simulation) {
     <p><strong>Total OTU:</strong> ${otuVal} (~${otuPct}% of a common 300 OTU/day reference)</p>
     <p><strong>ESOT at surfacing:</strong> ${esotVal}
       (~${esotPct}% of the DMAC 35 ${ESOT_SINGLE_EXPOSURE_LIMIT} single-exposure limit)</p>
+    <p>${rotLine}</p>
   `;
 }
 

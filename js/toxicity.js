@@ -202,6 +202,20 @@ export function cnsOtK(po2Series, stepsMin, initialK = 0) {
   return po2Series.reduce((k, po2, i) => cnsOtKStep(k, po2, durations[i]), initialK);
 }
 
+// --- ROT: Shykoff residual oxygen time ---------------------------------
+// A probability of detectable pulmonary toxicity, not a dose, so it has no
+// "limit" and isn't plotted. Fitted to dives at ~1.3 ATA and ignores PO2,
+// hence valid only inside this band. Only the single-dive part of the model
+// is implemented; its recovery between dives is not.
+export const ROT_VALID_PO2 = { min: 1.3, max: 1.4 };
+
+// Probability (%) after an equivalent dive duration in HOURS.
+export function rotProbOfToxicity(teqHours) {
+  const intercept = 3.586;
+  const slopePerHour = 0.490;
+  return 100 / (1 + Math.exp(intercept - slopePerHour * teqHours));
+}
+
 // Simulates a square-profile dive (constant depth, instant descent/ascent)
 // followed by a surface interval, at 1-minute resolution.
 export function simulateDive({
@@ -260,6 +274,11 @@ export function simulateDive({
   const esotAtSurface = esot;
   const surfaceTime = durationMin;
 
+  const tolerance = 1e-9;
+  const rotValid = divePo2 >= ROT_VALID_PO2.min - tolerance
+    && divePo2 <= ROT_VALID_PO2.max + tolerance;
+  const rotProbabilityAtSurface = rotValid ? rotProbOfToxicity(durationMin / 60) : null;
+
   let tPost = 0;
   while (tPost < postDiveMin) {
     const dt = Math.min(stepMin, postDiveMin - tPost);
@@ -287,6 +306,7 @@ export function simulateDive({
     cnsMax: Math.max(...cnsSeries),
     otuTotal,
     esotAtSurface,
+    rotProbabilityAtSurface, // null outside ROT_VALID_PO2
     surfaceTime,
     mode,
   };
