@@ -1,5 +1,7 @@
 // Chart.js setup/update logic, kept separate from calculation and DOM wiring.
 
+import { OTU_REFERENCE_LIMIT, ESOT_SINGLE_EXPOSURE_LIMIT } from './toxicity.js';
+
 let chartInstance = null;
 
 function toPoints(times, values) {
@@ -28,7 +30,13 @@ function updateReadout(readoutEl, context) {
   }
 
   const t = Math.round(points[0].parsed.x);
-  const parts = points.map((dp) => `${dp.dataset.shortLabel ?? dp.dataset.label} ${Math.round(dp.parsed.y)}%`);
+  const parts = points.map((dp) => {
+    const name = dp.dataset.shortLabel ?? dp.dataset.label;
+    const pct = Math.round(dp.parsed.y);
+    const { limit } = dp.dataset;
+    if (!limit) return `${name} ${pct}%`;
+    return `${name} ${Math.round((dp.parsed.y / 100) * limit)}/${limit} (${pct}%)`;
+  });
   readoutEl.textContent = `t = ${t} min  —  ${parts.join('   ')}`;
   readoutEl.classList.remove('idle');
 }
@@ -58,6 +66,7 @@ export function renderChart(
     datasets.push({
       label: 'OTU (% of reference limit)',
       shortLabel: 'OTU',
+      limit: OTU_REFERENCE_LIMIT,
       data: toPoints(simulation.times, simulation.otuPercentOfLimit),
       borderColor: '#2e86ab',
       backgroundColor: '#2e86ab',
@@ -71,6 +80,7 @@ export function renderChart(
     datasets.push({
       label: 'ESOT (% of single-exposure limit)',
       shortLabel: 'ESOT',
+      limit: ESOT_SINGLE_EXPOSURE_LIMIT,
       data: toPoints(simulation.times, simulation.esotPercentOfLimit),
       borderColor: '#6a4c93',
       backgroundColor: '#6a4c93',
