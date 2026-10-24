@@ -148,6 +148,8 @@ export function renderChart(
       scales: {
         x: {
           type: 'linear',
+          min: firstT,
+          max: lastT, // otherwise auto-rounded up, leaving an empty strip after the data
           title: { display: true, text: 'Time (minutes)' },
         },
         y: {
