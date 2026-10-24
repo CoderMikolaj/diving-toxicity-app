@@ -238,9 +238,25 @@ button[type="submit"]:hover {
   color: var(--accent);
 }
 
+.index-notes {
+  padding-left: 18px;
+}
+
+.index-notes li {
+  margin: 4px 0;
+}
+
+.index-notes a {
+  color: var(--accent);
+}
+
 .chart-panel .note {
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.4;
   margin-top: 16px;
+}
+
+.chart-panel .note.index-notes {
+  margin-top: 4px;
 }

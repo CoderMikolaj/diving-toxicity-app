@@ -41,16 +41,16 @@ function renderSummary(simulation) {
   const po2 = simulation.divePo2.toFixed(2);
   const po2Label = simulation.mode === 'ccr' ? 'PO2 (setpoint)' : 'PO2 at depth';
   const rotLine = simulation.rotProbabilityAtSurface === null
-    ? '<strong>ROT:</strong> only valid at PO2 1.3–1.4 ATA'
+    ? '<strong>ROT:</strong> only valid at PO2 near 1.3 ATA'
     : `<strong>ROT (Shykoff):</strong> ~${simulation.rotProbabilityAtSurface.toFixed(0)}% probability
       of detectable pulmonary toxicity`;
 
   summaryBox.innerHTML = `
     <p><strong>${po2Label}:</strong> ${po2} ATA</p>
     <p><strong>CNS:</strong> ${cnsPct}% of the NOAA single-exposure limit</p>
-    <p><strong>OTU:</strong> ${otuVal} (~${otuPct}% of a common 300 OTU/day reference)</p>
+    <p><strong>OTU (UPTD):</strong> ${otuVal} (~${otuPct}% of a common 300 OTU/day reference)</p>
     <p><strong>ESOT:</strong> ${esotVal}
-      (~${esotPct}% of the DMAC 35 ${ESOT_REFERENCE_LIMIT}/day limit for 7 consecutive diving days)</p>
+      (~${esotPct}% of the (DMAC 35) ${ESOT_REFERENCE_LIMIT}/day limit for 7 consecutive diving days)</p>
     <p>${rotLine}</p>
   `;
 }

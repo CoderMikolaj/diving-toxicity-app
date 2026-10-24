@@ -66,24 +66,17 @@
     <section class="panel chart-panel">
       <canvas id="toxicity-chart" height="400"></canvas>
       <p id="chart-readout" class="chart-readout idle">Hover the chart to see values at a given time.</p>
-      <p class="note">
-        All three indexes are shown as a % of a recommended limit so they can be compared on one
-        scale: CNS% is already a % of the NOAA single-exposure limit; OTU is shown as a % of a
-        commonly-cited 300 OTU/day reference; ESOT is shown as a % of the DMAC 35 Rev 1 limit of
-        450 per day for up to seven consecutive diving days.
-        The vertical dashed line marks surfacing. CNS% decays after surfacing (~90 min
-        half-time); OTU is shown flat since it has no recovery function, only a daily limit;
-        ESOT decays after surfacing using its own recovery model, which recovers more slowly
-        the longer the dive was.
-      </p>
-      <p class="note">
-        OTU and ESOT are two competing measures of pulmonary toxicity — DMAC 35
-        Rev 1 adopted ESOT in place of the older OTU (also called UPTD).
-        Note that DMAC does not score air-only dives at all, but here it is computed for any PO2.
-        ROT (Shykoff) is a probability of detectable pulmonary toxicity rather than a % of a
-        limit, so it is shown in the summary instead of the chart, and only for PO2 1.3–1.4 ATA,
-        the range it was fitted to.
-      </p>
+      <p class="note">Each index is plotted as a % of a recommended limit.</p>
+      <ul class="note index-notes">
+        <li><strong>CNS%</strong> — % of the NOAA 1991 single-dive time limit; recovers with a ~90 min
+          half-time. <a href="https://www.dhmjournal.com/images/IndividArticles/55Sept/Hoyt_OxygenGuideline_2025.pdf" target="_blank" rel="noopener">Hoyt 2025</a></li>
+        <li><strong>OTU</strong> (also UPTD) — the classic pulmonary dose; % of 300 OTU/day; no
+          recovery model. <a href="https://repository.library.noaa.gov/view/noaa/60673" target="_blank" rel="noopener">REPEX (NOAA)</a></li>
+        <li><strong>ESOT</strong> — newer pulmonary dose that includes recovery; % of 450/day, the
+          limit for 7 consecutive diving days. <a href="https://www.dmac-diving.org/guidance/DMAC35.pdf" target="_blank" rel="noopener">DMAC 35</a></li>
+        <li><strong>ROT</strong> — probability of detectable pulmonary toxicity, valid only near
+          1.3 ATA; not plotted as it has no recommended limit. <a href="https://pubmed.ncbi.nlm.nih.gov/26742255/" target="_blank" rel="noopener">Shykoff 2015</a></li>
+      </ul>
     </section>
   </main>
 

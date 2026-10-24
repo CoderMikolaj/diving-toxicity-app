@@ -207,9 +207,11 @@ export function cnsOtK(po2Series, stepsMin, initialK = 0) {
 // --- ROT: Shykoff residual oxygen time ---------------------------------
 // A probability of detectable pulmonary toxicity, not a dose, so it has no
 // "limit" and isn't plotted. Fitted to dives at ~1.3 ATA and ignores PO2,
-// hence valid only inside this band. Only the single-dive part of the model
-// is implemented; its recovery between dives is not.
-export const ROT_VALID_PO2 = { min: 1.3, max: 1.4 };
+// hence valid only inside this band. Shykoff's data spans 1.3–1.4 bar, but the
+// model is meant "ONLY for PO2 near 1.3 bar", so the band is centred on 1.3.
+// Only the single-dive part of the model is implemented; its recovery
+// between dives is not.
+export const ROT_VALID_PO2 = { min: 1.25, max: 1.35 };
 
 // Probability (%) after an equivalent dive duration in HOURS.
 export function rotProbOfToxicity(teqHours) {
