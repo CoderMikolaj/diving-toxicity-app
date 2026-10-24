@@ -47,10 +47,10 @@ function renderSummary(simulation) {
 
   summaryBox.innerHTML = `
     <p><strong>${po2Label}:</strong> ${po2} ATA</p>
-    <p><strong>CNS:</strong> ${cnsPct}% of the NOAA single-exposure limit</p>
+    <p><strong>CNS:</strong> ${cnsPct}% of the NOAA 1991 single-exposure limit</p>
     <p><strong>OTU (UPTD):</strong> ${otuVal} (~${otuPct}% of a common 300 OTU/day reference)</p>
     <p><strong>ESOT:</strong> ${esotVal}
-      (~${esotPct}% of the (DMAC 35) ${ESOT_REFERENCE_LIMIT}/day limit for 7 consecutive diving days)</p>
+      (~${esotPct}% of the ${ESOT_REFERENCE_LIMIT}/day limit for 7 consecutive diving days)</p>
     <p>${rotLine}</p>
   `;
 }
